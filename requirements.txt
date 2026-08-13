@@ -1,0 +1,8 @@
+datasets
+tokenizers
+numpy
+pandas
+scipy
+matplotlib
+jupyter
+ipykernel
