@@ -1,6 +1,6 @@
 # 🧠 LLM Lab — SVNIT DOAI
 
-> **Language Identification & Subword Tokenization on Indian Languages**
+> **Natural Language Processing & Language Models**
 > Semester 7 · Department of Artificial Intelligence · SVNIT Surat
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
@@ -18,6 +18,14 @@
   - [Lab 01 — Baseline Language Identifier (CPU/GPU)](#lab-01--baseline-language-identifier-cpugpu)
   - [Lab 02 — TF-IDF Variant Experiments (GPU)](#lab-02--tf-idf-variant-experiments-gpu)
   - [Lab 03 — BPE & WordPiece Tokenization](#lab-03--bpe--wordpiece-tokenization)
+  - [Lab 04 — N-gram Language Models](#lab-04--n-gram-language-models)
+  - [Lab 05 — Word and Sentence Embeddings](#lab-05--word-and-sentence-embeddings)
+  - [Lab 06 — Word-Vector Language Classifiers](#lab-06--word-vector-language-classifiers)
+  - [Lab 07 — HMM Noun-Phrase Chunking](#lab-07--hmm-noun-phrase-chunking)
+  - [Lab 08 — English-to-Indic NMT](#lab-08--english-to-indic-nmt)
+  - [Lab 09 — NMT with Pretrained Embeddings](#lab-09--nmt-with-pretrained-embeddings)
+  - [Lab 10 — Midsem Exercises and BERT Fine-Tuning](#lab-10--midsem-exercises-and-bert-fine-tuning)
+  - [Lab 11 — Probing BERT Layers](#lab-11--probing-bert-layers)
 - [Dataset](#-dataset)
 - [Results at a Glance](#-results-at-a-glance)
 - [Project Structure](#-project-structure)
@@ -30,30 +38,18 @@
 
 ## 🔍 Overview
 
-This repository contains three progressive lab notebooks exploring **classical NLP techniques** for Indian language processing using the [IndicCorpV2](https://huggingface.co/datasets/ai4bharat/IndicCorpV2) dataset.
+This repository contains eleven lab notebooks covering NLP and language-modeling topics, including language identification, subword tokenization, n-gram models, embeddings, sequence models, chunking, neural machine translation, and BERT.
 
-The series covers the full pipeline from raw multilingual text to a trained classifier and subword tokenizer — without using any pre-trained transformer models. Everything is built from scratch using **NumPy, PyTorch, and the HuggingFace `tokenizers` library**.
+The notebooks use different datasets and libraries depending on the assignment. Several labs use IndicCorpV2; the machine-translation labs use the ILCI subset of BPCC.
 
-```
-Raw Text (IndicCorpV2)
-       │
-       ▼
-  Sentence Splitting & Filtering
-       │
-       ▼
-  TF-IDF Feature Extraction          ──► Lab 01 / Lab 02
-  (word n-grams + char n-grams)
-       │
-       ▼
-  Softmax Classifier (GPU)
-       │
-       ▼
-  Evaluation (Macro-F1 per language)
-       │
-       ▼
-  BPE / WordPiece Tokenizer Training  ──► Lab 03
-  (varying training size & vocab size)
-```
+| Labs | Topics |
+|------|--------|
+| 01–02 | Language identification with TF-IDF features |
+| 03 | BPE and WordPiece subword tokenization |
+| 04–06 | N-gram models, word embeddings, and language classifiers |
+| 07 | HMM-based noun-phrase chunking |
+| 08–09 | English-to-Indic neural machine translation |
+| 10–11 | Midterm NLP exercises, BERT fine-tuning, and representation probing |
 
 ---
 
@@ -171,6 +167,70 @@ SPECIAL_TOKENS  = ["[UNK]", "[PAD]", "[CLS]", "[SEP]", "[MASK]"]
 
 ---
 
+### Lab 04 — N-gram Language Models
+
+**File:** [`04_lab_.ipynb`](04_lab_.ipynb)
+
+Builds word-level n-gram language models from the local train, validation, and test CSV files. Compares unsmoothed maximum-likelihood estimation and smoothing methods, and evaluates their ability to model text.
+
+---
+
+### Lab 05 — Word and Sentence Embeddings
+
+**File:** [`05_lab_.ipynb`](05_lab_.ipynb)
+
+Trains Word2Vec, FastText, and Doc2Vec models on the same corpus and data splits used in the earlier language-modeling work. Applies K-Means to word vectors and uses sentence embeddings to retrieve nearest training sentences.
+
+---
+
+### Lab 06 — Word-Vector Language Classifiers
+
+**File:** [`06_lab_.ipynb`](06_lab_.ipynb)
+
+Compares language-identification classifiers built from FastText word vectors, including logistic regression, MLP, LSTM, and GRU models. Reports macro-F1 scores.
+
+---
+
+### Lab 07 — HMM Noun-Phrase Chunking
+
+**File:** [`07_lab_.ipynb`](07_lab_.ipynb)
+
+Uses a Hidden Markov Model for noun-phrase chunking with `B-NP`, `I-NP`, and `O` tags. Implements the Forward algorithm and Viterbi decoding, with Add-K smoothing and `seqeval` evaluation.
+
+---
+
+### Lab 08 — English-to-Indic NMT
+
+**File:** [`08_lab_.ipynb`](08_lab_.ipynb)
+
+Trains an OpenNMT-py Transformer on the ILCI subset of BPCC. The notebook creates length-binned data splits, translates the test set, and evaluates results with SacreBLEU overall and by length bin.
+
+---
+
+### Lab 09 — NMT with Pretrained Embeddings
+
+**File:** [`09_lab_.ipynb`](09_lab_.ipynb)
+
+Compares Transformer NMT models initialized with FastText and BPEmb embeddings, using the same ILCI/BPCC dataset and length-binned splits as Lab 08.
+
+---
+
+### Lab 10 — Midsem Exercises and BERT Fine-Tuning
+
+**File:** [`10_lab_.ipynb`](10_lab_.ipynb)
+
+Works through mid-semester questions on beam search, BPE, TF-IDF, and Doc2Vec, then fine-tunes a BERT-type model for language identification and compares it with classical and word-vector classifiers.
+
+---
+
+### Lab 11 — Probing BERT Layers
+
+**File:** [`11_lab_.ipynb`](11_lab_.ipynb)
+
+Probes BERT representations for sentence length, bigram shift, and subject-number information.
+
+---
+
 ## 📊 Dataset
 
 | Property | Value |
@@ -251,26 +311,23 @@ mal_Mlym  Malayalam  ███████████████████�
 ## 🗂 Project Structure
 
 ```
-02_lab/
-├── 📓 01_lab_.ipynb          # Lab 01: Baseline language ID (CPU/GPU)
-├── 📓 02_lab_.ipynb          # Lab 02: TF-IDF variant experiments
-├── 📓 03_lab_.ipynb          # Lab 03: BPE & WordPiece tokenization
-│
-├── 📄 requirements.txt       # Python dependencies
-│
-├── 📊 train.csv              # 18,400 training sentences (23 languages)
-├── 📊 val.csv                # 2,300 validation sentences
-├── 📊 test.csv               # 2,300 test sentences
-│
-└── 📁 lab03_data/            # Lab 03 outputs (auto-created)
-    ├── hin_Deva_sentences.csv          # Raw sentence pool (~1M)
-    ├── hin_Deva_train.csv              # 1M training sentences
-    ├── hin_Deva_dev.csv                # 1,000 dev sentences
-    ├── hin_Deva_test.csv               # 1,000 test sentences
-    └── hin_Deva_tokenization_results.csv  # Experiment results
+LLM_LAB_SVNIT_DOAI_/
+├── 📓 01_lab_.ipynb           # Language identification
+├── 📓 02_lab_.ipynb           # TF-IDF experiments
+├── 📓 03_lab_.ipynb           # BPE and WordPiece
+├── 📓 04_lab_.ipynb           # N-gram language models
+├── 📓 05_lab_.ipynb           # Word2Vec, FastText, Doc2Vec, K-Means
+├── 📓 06_lab_.ipynb           # Word-vector classifiers
+├── 📓 07_lab_.ipynb           # HMM noun-phrase chunking
+├── 📓 08_lab_.ipynb           # English-to-Indic NMT
+├── 📓 09_lab_.ipynb           # NMT with pretrained embeddings
+├── 📓 10_lab_.ipynb           # Midsem exercises and BERT fine-tuning
+├── 📓 11_lab_.ipynb           # BERT probing
+├── 📄 README.md
+└── 📄 requirements.txt
 ```
 
-> **Note:** The CSV files are committed to this repo so you can run the notebooks without re-downloading from IndicCorpV2.
+Notebooks may create datasets, caches, model checkpoints, and result files when run. These generated files are not all included in the repository.
 
 ---
 
@@ -307,7 +364,7 @@ pip install torch
 pip install -r requirements.txt
 ```
 
-`requirements.txt` contains:
+`requirements.txt` provides dependencies used by the initial labs; later notebooks may need additional, notebook-specific packages:
 ```
 datasets
 tokenizers
@@ -329,19 +386,20 @@ python -m ipykernel install --user --name torch_env --display-name "Python (torc
 
 ## ▶️ How to Run
 
-Open each notebook in **VS Code** or **JupyterLab** and select the `torch_env` kernel.
+Open a notebook in **VS Code** or **JupyterLab** and select a Python kernel with that notebook's dependencies installed.
 
 ```bash
 jupyter lab
 ```
 
-Run cells top-to-bottom. Each notebook is self-contained:
+Run cells top-to-bottom. Data sources, hardware needs, and outputs vary by lab; follow the setup and configuration notes in the notebook you are running. For example:
 
 | Notebook | First Run | Subsequent Runs |
 |----------|-----------|-----------------|
-| `01_lab_.ipynb` | Streams data from HuggingFace, saves CSVs | Loads existing CSVs instantly |
-| `02_lab_.ipynb` | Same as Lab 01 if CSVs missing | Loads existing CSVs instantly |
-| `03_lab_.ipynb` | Streams ~1M Hindi sentences (≈10–20 min) | Loads from `lab03_data/` cache |
+| `01_lab_.ipynb` | May stream data from HuggingFace and create local CSVs | Reuses available local data |
+| `02_lab_.ipynb` | Uses the language-identification data from Lab 01 | Reuses available local data |
+| `03_lab_.ipynb` | Downloads/loads IndicCorpV2 data and trains tokenizers | Reuses notebook-created data/cache when available |
+| `04_lab_.ipynb`–`11_lab_.ipynb` | Follow each notebook's data, dependency, and hardware setup instructions | Reuse local data or checkpoints when configured |
 
 > ⚠️ **HuggingFace unauthenticated requests** may be rate-limited. Set a token to avoid this:
 > ```bash
@@ -414,7 +472,7 @@ Tested on:
 | Python | 3.10 (Anaconda `torch_env`) |
 | OS | Windows 11 |
 
-All labs run fine on **CPU** as well — just set `DEVICE = "cpu"` manually. Training times will be 3–5× slower on CPU.
+Some experiments support CPU execution, while training speed and hardware requirements vary by notebook. Check each notebook's configuration before running it; GPU-oriented notebooks may run substantially slower on CPU.
 
 ---
 
